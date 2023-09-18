@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Geolocation Example</title>
+</head>
+<body>
+    <h1>Geolocation Example</h1>
+    <p id="location"></p>
+    
+    <script>
+        let currentLocation = "Location not available";
+
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            currentLocation = `Latitude: ${latitude}, Longitude: ${longitude}`;
+            document.getElementById("location").innerHTML = currentLocation;
+        }
+
+        function showError(error) {
+            currentLocation = `Error: ${error.message}`;
+            document.getElementById("location").innerHTML = currentLocation;
+        }
+
+        function getLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError, {
+                    enableHighAccuracy: true  // Enable high accuracy
+                });
+            } else {
+                currentLocation = "Geolocation is not supported by this browser.";
+                document.getElementById("location").innerHTML = currentLocation;
+            }
+        }
+
+        function watchLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.watchPosition(showPosition, showError, {
+                    enableHighAccuracy: true  // Enable high accuracy
+                });
+            } else {
+                currentLocation = "Geolocation is not supported by this browser.";
+                document.getElementById("location").innerHTML = currentLocation;
+            }
+        }
+
+        // Add an event listener to ensure the DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            setInterval(getLocation, 5000); // Update location every 5 seconds
+            watchLocation(); // Start watching location changes
+        });
+    </script>
+</body>
+</html>
+
